@@ -1,0 +1,49 @@
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "123456"
+    ports:
+      - 5432:5432
+    networks:
+      - postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+
+  pgadmin4:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: joao_af@live.com
+      PGADMIN_DEFAULT_PASSWORD: "123456"
+    ports:
+      - 8080:80
+    depends_on:
+      - postgres
+    networks:
+      - postgres
+    volumes:
+      - ./servers.json:/pgadmin4/servers.json
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+
+networks:
+  postgres:
+    name: postgres-net
+    driver: bridge
+
+volumes:
+  postgres:
+    name: postgres-data
