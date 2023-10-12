@@ -37,3 +37,15 @@ func BuscaProdutos() []Produto {
 	defer bd.Close()
 	return produtos
 }
+
+func AddProduto(nome, descricao string, preco float64, quantidade int) {
+	bd := db.ConexaoBD()
+	//prepara o banco para inserção do produto
+	inserirBD, err := bd.Prepare("insert into produtos (nome, descricao, preco, quantidade) values ($1, $2, $3, $4)")
+	if err != nil {
+		panic(err.Error())
+	}
+	//se não houver erro nas linhas anteriores, insere o produto no banco
+	inserirBD.Exec(nome, descricao, preco, quantidade)
+	defer bd.Close()
+}
