@@ -3,7 +3,7 @@ package model
 import "loja-web-go/db"
 
 type Produto struct {
-	id         int
+	Id         int
 	Nome       string
 	Descricao  string
 	Preco      float64
@@ -28,6 +28,7 @@ func BuscaProdutos() []Produto {
 		if err != nil {
 			panic(err.Error())
 		}
+		p.Id = id
 		p.Nome = nome
 		p.Descricao = descricao
 		p.Preco = preco
@@ -47,5 +48,16 @@ func AddProduto(nome, descricao string, preco float64, quantidade int) {
 	}
 	//se não houver erro nas linhas anteriores, insere o produto no banco
 	inserirBD.Exec(nome, descricao, preco, quantidade)
+	defer bd.Close()
+}
+
+func DeletaProduto(id string) {
+	bd := db.ConexaoBD()
+
+	deletarBD, err := bd.Prepare("delete from produtos where id=$1")
+	if err != nil {
+		panic(err.Error())
+	}
+	deletarBD.Exec(id)
 	defer bd.Close()
 }

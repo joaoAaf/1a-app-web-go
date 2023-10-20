@@ -10,4 +10,5 @@ func Rotas() {
 	http.HandleFunc("/", controllers.Index)
 	http.HandleFunc("/register", controllers.Register)
 	http.HandleFunc("/insert", controllers.Insert)
+	http.HandleFunc("/delete", controllers.Delete)
 }
